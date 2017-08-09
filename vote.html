@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>演示：PHP+jQuery+MySql实现红蓝投票功能</title>
+<meta name="keywords" content="PHP，MySql，jquery" />
+<meta name="description" content="Helloweba文章结合实例演示HTML5、CSS3、jquery、PHP等WEB技术应用。" />
+<link rel="stylesheet" type="text/css" href="http://www.helloweba.com/demo/css/main.css" />
+<style type="text/css">
+.vote{width:288px; height:300px; margin:40px auto;position:relative}
+.votetitle{width:100%;height:62px; background:url(icon.png) no-repeat 0 30px; font-size:15px}
+.red{position:absolute; left:0; top:64px; height:80px;}
+.blue{position:absolute; right:0; top:64px; height:80px;}
+.red p,.blue p{line-height:22px}
+.redhand{position:absolute; left:0;width:36px; height:36px; background:url(icon.png) no-repeat -1px -38px;cursor:pointer}
+.bluehand{position:absolute; right:0;width:36px; height:36px; background:url(icon.png) no-repeat -41px -38px;cursor:pointer}
+.grayhand{width:34px; height:34px; background:url(icon.png) no-repeat -83px -38px;cursor:pointer}
+.redbar{position:absolute; left:42px; margin-top:8px;}
+.bluebar{position:absolute; right:42px; margin-top:8px; }
+.redbar span{display:block; height:6px; background:red; width:100%;border-radius:4px;}
+.bluebar span{display:block; height:6px; background:#09f; width:100%;border-radius:4px; position:absolute; right:0}
+.redbar p{line-height:20px; color:red;}
+.bluebar p{line-height:20px; color:#09f; text-align:right; margin-top:6px}
+</style>
+<script type="text/javascript" src="http://libs.useso.com/js/jquery/1.7.2/jquery.min.js"></script>
+<script type="text/javascript">
+$(function(){
+	getdata("vote.php",1);
+	
+	$(".redhand").click(function(){
+		getdata("vote.php?action=red",1);
+	});
+	$(".bluehand").click(function(){
+		getdata("vote.php?action=blue",1);
+	});
+});
+
+function getdata(url,sid){
+	$.getJSON(url,{id:sid},function(data){
+		if(data.success==1){
+			var w = 208;
+			$("#red_num").html(data.red);
+			$("#red").css("width",data.red_percent*100+"%");
+			var red_bar_w = w*data.red_percent-10;
+			$("#red_bar").css("width",red_bar_w);
+			$("#blue_num").html(data.blue);
+			$("#blue").css("width",data.blue_percent*100+"%");
+			var blue_bar_w = w*data.blue_percent;
+			$("#blue_bar").css("width",blue_bar_w);
+		}else{
+			alert(data.msg);
+		}
+	});
+}
+</script>
+</head>
+
+<body>
+<div id="header">
+   <div id="logo"><h1><a href="http://www.helloweba.com" title="返回helloweba首页">helloweba</a></h1></div>
+</div>
+
+<div id="main">
+   <h2 class="top_title"><a href="http://www.helloweba.com/view-blog-290.html">PHP+jQuery+MySql实现红蓝投票功能</a></h2>
+   <div class="vote">
+		<div class="votetitle">您对Helloweba提供的文章的看法？</div>
+		<div class="red" id="red">
+			<p>非常实用</p>
+			<div class="redhand"></div>
+			<div class="redbar" id="red_bar">
+				<span></span>
+				<p id="red_num"></p>
+			</div>
+		</div>
+		<div class="blue" id="blue">
+			<p style="text-align:right">完全看不懂</p>
+			<div class="bluehand"></div>
+			<div class="bluebar" id="blue_bar">
+				<span></span>
+				<p id="blue_num"></p>
+			</div>
+		</div>
+   </div>
+</div>
+
+<div id="footer">
+    <p>Powered by helloweba.com  允许转载、修改和使用本站的DEMO，但请注明出处：<a href="http://www.helloweba.com">www.helloweba.com</a></p>
+</div>
+
+</body>
+</html>
